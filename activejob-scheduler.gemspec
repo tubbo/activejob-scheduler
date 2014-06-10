@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{A scheduling apparatus for ActiveJob based on Rufus.}
   spec.description   = %q{A scheduling apparatus for ActiveJob based on Rufus. Resque::Scheduler for everyone!}
   spec.homepage      = "http://github.com/tubbo/activejob-scheduler"
-  spec.license       = "MIT"
+  spec.license       = "NCSA"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
