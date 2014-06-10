@@ -1,0 +1,3 @@
+example:
+  every: '1m'
+  job_class: 'ExampleJob'

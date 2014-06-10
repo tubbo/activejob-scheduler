@@ -1,8 +1,12 @@
+require 'yaml'
+
 module ActiveJob::Scheduler
   class Jobs
     include Enumerable
 
-    def initialize(arg)
+    attr_reader :path
+
+    def initialize(from_path)
       @path = from_path
     end
 
@@ -16,7 +20,9 @@ module ActiveJob::Scheduler
 
     private
     def collection
-      params.map { { |attrs| Job.define attrs }
+      params.keys.map do |name|
+        Job.new params[name].merge name: name
+      end
     end
 
     def params
