@@ -24,5 +24,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activejob'
   spec.add_dependency 'rufus-scheduler'
-  spec.add_dependency 'active_model'
+  spec.add_dependency 'activemodel'
 end
