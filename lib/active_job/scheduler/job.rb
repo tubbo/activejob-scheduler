@@ -17,36 +17,25 @@ module ActiveJob::Scheduler
     #   between runs (can be 'every', 'at', 'cron', or 'in')
     #
     # These are all specified in the YAML.
-    attr_accessor :name, :description, :class_name, :interval
+    attr_accessor :name, :description, :job_class, :interval, :interval_value
+    attr_reader :attributes
 
     # Interval types supported by the scheduler.
-    INTERVALS = /at|in|cron|every/
+    INTERVALS = %w(at in cron every)
 
     validates :name, presence: true
-    validates :interval, inclusion: { in: INTERVALS }
-    validate  :job_class
+    validates :interval, presence: true
+    validates :interval_value, presence: true
 
     # Set up and instantiate this Job object for use with the scheduler.
     # Basically, this wraps the enqueued execution of an `ActiveJob::Base`.
     def initialize(from_attrs={})
+      @interval, @interval_value = from_attrs.select { |attr, value|
+        INTERVALS.include? "#{attr}"
+      }.first.to_a.flatten
+      from_attrs.delete @interval
+      @attributes = from_attrs
       super
-    end
-
-    # Find the value of the 'at', 'every', 'cron' or 'in' attribute,
-    # whichever one is encountered first.
-    def interval_value
-      @value ||= attributes[interval]
-    end
-
-    # The interval by which this job operates, either 'at', 'every',
-    # 'cron' or 'in', whichever is encountered first.
-    def interval
-      @interval ||= attributes.find { |key, val| key =~ INTERVALS }
-    end
-
-    # Class names default to the name of the task.
-    def job_class_name
-      @job_class_name ||= attributes['class'] || name.classify
     end
 
     # Description is the humanized name of the task by default.
@@ -57,14 +46,14 @@ module ActiveJob::Scheduler
     # Enqueue this job with ActiveJob.
     def enqueue
       return false unless valid?
-      job_class.enqueue
+      jobject.enqueue
     end
 
     private
-    def job_class
-      job_class_name.constantize
+    def jobject
+      job_class.constantize
     rescue StandardError
-      errors.add :job_class, "'#{job_class_name}' was not found"
+      errors.add :job_class, "'#{job_class}' was not found"
     end
   end
 end

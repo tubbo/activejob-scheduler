@@ -69,7 +69,7 @@ module ActiveJob::Scheduler
     def initialize(argv, env)
       @env = env
       @args = argv
-      @options = option_parser.parse!(argv)
+      @options = option_parser.parse! argv
     end
 
     # Start the scheduler CLI immediately from given command-line
