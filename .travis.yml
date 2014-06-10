@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 1.9
+  - 1.8
+  - 2.1
+script: bundle exec rake test
+deploy:
+  provider: rubygems
+  on:
+    tags: true
