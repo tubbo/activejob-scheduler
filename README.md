@@ -1,5 +1,7 @@
 # ActiveJob::Scheduler
 
+[![Current Gem Version](https://badge.fury.io/rb/activejob-scheduler.svg)](http://badge.fury.io/rb/activejob-scheduler)
+
 An extension to [ActiveJob][aj] for running background jobs
 periodically, according to a schedule. Inspired by its predecessors,
 [resque-scheduler][resque] and [sidekiq-scheduler][sidekiq],
