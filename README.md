@@ -42,7 +42,7 @@ $ bundle exec ajs
 Or, with a Rake task:
 
 ```bash
-$ bundle exec rake activejob:schedule
+$ bundle exec rake schedule
 ```
 
 The schedule must run as a separate process, but it's very light...it
