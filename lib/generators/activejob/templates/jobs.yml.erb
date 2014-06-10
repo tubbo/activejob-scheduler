@@ -1,0 +1,12 @@
+# Job definitions should look like this:
+#
+#example_job:
+#  cron: "0 0 * * *"
+#  # you can use rufus-scheduler "every" syntax in place of cron if you prefer
+#  # every: 1h
+#  # By default the job name (hash key) will be taken as worker class name.
+#  # If you want to have a different job name and class name, provide the 'class' option
+#  class: "QueueDocuments"
+#  queue: high
+#  args:
+#  description: "This job queues all content for indexing in solr"
