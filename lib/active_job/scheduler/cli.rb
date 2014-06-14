@@ -1,4 +1,5 @@
 require 'optparse'
+require 'rufus/scheduler'
 
 require 'active_job/scheduler/jobs'
 
@@ -77,7 +78,12 @@ module ActiveJob::Scheduler
     # Start the scheduler CLI immediately from given command-line
     # arguments.
     def self.run(argv, env)
+      logger.info "Starting ActiveJob Scheduler.."
       new(argv, env).run
+    end
+
+    def self.logger
+      @logger ||= Logger.new STDOUT
     end
 
     # Now that we have args, actually begin running the schedule by
@@ -87,16 +93,23 @@ module ActiveJob::Scheduler
     # that choice. All we are doing when Rufus fires this block on the
     # scheduled interval is enqueuing the job in your queue of choice.
     def run
+      logger.debug "Scheduling jobs with Rufus.."
       jobs.each do |job|
+        logger.debug "Found Job :#{job.name}"
         rufus.send(job.interval, job.interval_value) do
           job.enqueue
         end
       end
 
-      rufus.start
+      logger.debug "Joining the Rufus thread.."
+      rufus.join # join this process to the rufus schedule
     end
 
     private
+    def logger
+      self.class.logger
+    end
+
     def option_parser
       OptionParser.new do |parser|
         parser.banner = USAGE
