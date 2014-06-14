@@ -2,6 +2,7 @@
 #
 # Easy-peasy binary goodness for the ActiveJob::Scheduler
 
+require 'bundler/setup'
 require 'active_job/scheduler'
 
 ActiveJob::Scheduler::CLI.run ARGV, ENV
