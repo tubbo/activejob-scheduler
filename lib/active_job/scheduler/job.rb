@@ -43,6 +43,12 @@ module ActiveJob::Scheduler
       @description ||= name.titleize
     end
 
+    # The job class defaults to a classified version of the name, if
+    # it's not provided.
+    def job_class
+      @job_class ||= name.classify
+    end
+
     # Enqueue this job with ActiveJob.
     def enqueue
       return false unless valid?
