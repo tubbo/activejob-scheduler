@@ -1,8 +1,10 @@
 require 'optparse'
 
+require 'active_job/scheduler/jobs'
+
 module ActiveJob::Scheduler
   # Controller for the schedule via the CLI.
-  class Cli
+  class CLI
     attr_reader :env, :options
 
     # A short doc explaining the CLI.
@@ -82,10 +84,14 @@ module ActiveJob::Scheduler
     # loading each Job into Rufus::Scheduler. Rufus uses methods like
     # `every` and `cron` to determine what kind of job you're pushing
     # into it, so we use send() to give the Job object the power to make
-    # that choice.
+    # that choice. All we are doing when Rufus fires this block on the
+    # scheduled interval is enqueuing the job in your queue of choice,
+    # so now the ball is back in ActiveJob's court. ;)
     def run
       jobs.each do |job|
-        rufus.send job.interval, *job.rufus_params
+        rufus.send(job.interval, job.interval_value) do
+          job.enqueue
+        end
       end
 
       rufus.start
