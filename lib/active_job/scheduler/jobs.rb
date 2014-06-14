@@ -1,4 +1,5 @@
 require 'yaml'
+require 'active_job/scheduler/job'
 
 module ActiveJob::Scheduler
   class Jobs
