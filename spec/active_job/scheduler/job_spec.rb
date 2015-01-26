@@ -38,7 +38,7 @@ module ActiveJob::Scheduler
 
     it "enqueues the job with active_job" do
       expect(subject).to be_valid
-      expect(subject.enqueue).to be_true
+      expect(subject.enqueue).to be true
     end
   end
 end

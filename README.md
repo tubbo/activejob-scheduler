@@ -28,7 +28,7 @@ And then execute:
 Run the following command to generate a YAML-based schedule:
 
 ```bash
-$ rails generate activejob:schedule
+$ rails generate active_job:schedule
 ```
 
 Edit this YAML file the same way you would with resque-scheduler or
