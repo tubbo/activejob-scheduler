@@ -1,8 +1,7 @@
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
 
 require 'active_job/scheduler'
-require "#{File.dirname(__FILE__)}/spec/dummy/config/environment"
-require 'capybara/rspec'
+require "#{File.dirname(__FILE__)}/dummy/config/environment"
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

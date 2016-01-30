@@ -7,6 +7,8 @@ module ActiveJob
 
       TYPES = %w(cron in at every)
 
+      delegate :==, to: :to_i
+
       def initialize(params = {})
         params.each do |type, value|
           @type = type
