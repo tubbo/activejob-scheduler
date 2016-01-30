@@ -1,12 +1,26 @@
-require "bundler/gem_tasks"
-require "rspec/core/rake_task"
-require "rubocop/rake_task"
-require "yard"
+begin
+  require 'bundler/setup'
+rescue LoadError
+  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
+end
 
-RSpec::Core::RakeTask.new :test
+require 'rdoc/task'
 
-RuboCop::RakeTask.new :lint
+RDoc::Task.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'ActivejobScheduler'
+  rdoc.options << '--line-numbers'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
 
-YARD::Rake::YardocTask.new :doc
+APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
+load 'rails/tasks/engine.rake'
 
-task default: %i(lint test build)
+
+load 'rails/tasks/statistics.rake'
+
+
+
+Bundler::GemHelper.install_tasks
+

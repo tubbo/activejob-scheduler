@@ -23,6 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3"
   spec.add_development_dependency "yard", "~> 0"
+  spec.add_development_dependency "rubocop", "~> 0"
+  spec.add_development_dependency "sqlite3"
 
   spec.add_dependency "activejob"
   spec.add_dependency "activesupport"
