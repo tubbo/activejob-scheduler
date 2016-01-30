@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "activejob/scheduler"
-
-ActiveJob::Scheduler::CLI.start
