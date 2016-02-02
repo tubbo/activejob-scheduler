@@ -1,4 +1,15 @@
 language: ruby
 rvm:
+  - 2.0.0-p648
+  - 2.1.8
+  - 2.2.4
   - 2.3.0
-before_install: gem install bundler -v 1.10.3
+before_install: gem install bundler
+deploy:
+  provider: rubygems
+  api_key:
+    secure: Pc0pTAFK72e7m47TnOg8f07MF8wrx5soR/D6K9VOT5+TWEPmYktVuoubsdNBc7Qf+MoTRdqbTeyvcqBI2BCuQUh98Ls8AC3pdmiz2WNNN8LFm3JYudLR/tRU2Fm6jsM5hE/Q6kdqCBEYgR1radwGv5IBBl9JjCs8amC2bVuJHBw=
+  gem: activejob-scheduler
+  on:
+    tags: true
+    repo: tubbo/activejob-scheduler
