@@ -16,7 +16,8 @@ module ActiveJob
       end
 
       before do
-        allow(Scheduler.events).to receive(:find).with('ActiveJob::Scheduler::TestJob').and_return(event)
+        allow(Scheduler.events).to \
+          receive(:find).with('ActiveJob::Scheduler::TestJob').and_return(event)
       end
 
       subject { TestJob.new }

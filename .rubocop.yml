@@ -7,3 +7,7 @@ AllCops:
 Metrics/LineLength:
   Exclude:
     - activejob-scheduler.gemspec
+
+Metrics/MethodLength:
+  Exclude:
+    - lib/active_job/scheduler/event.rb
