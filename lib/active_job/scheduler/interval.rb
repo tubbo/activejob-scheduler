@@ -2,30 +2,32 @@ require 'rufus/scheduler'
 
 module ActiveJob
   module Scheduler
+    # Generates a time duration from a given parsed interval value.
     class Interval
       attr_reader :type, :value
 
-      TYPES = %w(cron in at every)
+      TYPES = %w(cron in at every).freeze
 
-      delegate :==, to: :to_i
+      delegate :==, to: :to_duration
 
       def initialize(params = {})
         params.each do |type, value|
           @type = type
           @value = value
         end
-
-        unless @type.present?  && TYPES.include?(@type)
-          fail ArgumentError, "'#{@type}' must be of type #{TYPES}"
-        end
-
-        unless @value.present?
-          fail ArgumentError, "Cannot schedule with nil value"
-        end
       end
 
-      def to_i
-        Rufus::Scheduler.send "parse_#{type}", value
+      def to_duration
+        Rufus::Scheduler.send "parse_#{parser}", value
+      end
+
+      def parser
+        case type.to_s
+        when 'every'
+          'duration'
+        else
+          type
+        end
       end
     end
   end

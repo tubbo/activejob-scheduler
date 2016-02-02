@@ -5,7 +5,7 @@ require 'rubocop/rake_task'
 require 'yard'
 require 'travis/release/task'
 
-APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
+APP_RAKEFILE = File.expand_path('../spec/dummy/Rakefile', __FILE__)
 
 load 'rails/tasks/engine.rake'
 load 'rails/tasks/statistics.rake'

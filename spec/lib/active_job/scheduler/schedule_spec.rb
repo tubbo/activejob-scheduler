@@ -3,32 +3,40 @@ require 'spec_helper'
 module ActiveJob
   module Scheduler
     RSpec.describe Schedule do
+      let :path do
+        Rails.root.join('config', 'jobs.yml')
+      end
+
       subject do
         Schedule.new
       end
 
-      it 'derives a path to the jobs file' do
-        expect(subject.path).to eq 'spec/dummy/config/jobs.yml'
-      end
-
-      it 'finds event by class name' do
-        allow(subject).to respond_to(:yaml).and_return(
+      before do
+        allow(subject).to receive(:yaml).and_return(
           'foo_bar' => {
             'class_name' => 'FooBarJob',
             'every' => '1h'
           }
         )
-        expect(subject.find('FooBarJob')).to be_present
+      end
+
+      it 'derives a path to the jobs file' do
+        expect(subject.path).to eq path
+      end
+
+      it 'finds event by class name' do
+        expect(subject.send(:events).first.job_class_name).to eq 'FooBarJob'
+        expect(subject.find_by_name('FooBarJob')).to be_present
       end
 
       it 'enumerates over all events' do
-        allow(subject).to respond_to(:events).and_return([Event.new])
-        expect(subject.each).to be_a Iterator
+        expect(subject).to respond_to(:each)
       end
 
       it 'starts all events simultaneously' do
-        allow_any_instance_of(Event).to respond_to(:perform)
-        expect(subject.start).to be_any
+        allow_any_instance_of(Event).to receive(:perform)
+        expect(subject.send(:events)).not_to be_empty
+        expect(subject.start).not_to be_empty
       end
     end
   end

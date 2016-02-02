@@ -1,7 +1,7 @@
-require "yaml"
-require "active_job"
-require "active_support/all"
-require "active_job/scheduler/version"
+require 'yaml'
+require 'active_job'
+require 'active_support/all'
+require 'active_job/scheduler/version'
 
 module ActiveJob
   # Scheduled periodic jobs with +ActiveJob+.
@@ -12,6 +12,7 @@ module ActiveJob
     autoload :Event
     autoload :Job
     autoload :Schedule
+    autoload :Interval
 
     # A schedule of all periodic job events.
     #

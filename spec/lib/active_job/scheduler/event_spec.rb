@@ -1,14 +1,15 @@
 require 'spec_helper'
 
+class FooBarJob < ActiveJob::Base
+  def perform
+    true
+  end
+end
+
 module ActiveJob
   module Scheduler
-    RSpec.describe Event do
-      class FooBarJob < ActiveJob::Base
-        def perform
-          true
-        end
-      end
 
+    RSpec.describe Event do
       subject do
         Event.new name: 'foo_bar', interval: { every: '3h' }
       end
@@ -18,11 +19,13 @@ module ActiveJob
       end
 
       it 'derives interval' do
-        expect(subject.interval).to eq(interval)
+        expect(subject.interval).to eq(3.hours)
       end
 
       it 'sets active job' do
-        expect(subject.active_job).to be_a(FooBarJob)
+        expect(subject.active_job).to be_a(ConfiguredJob)
+        expect(subject.active_job.instance_variable_get('@job_class')).to eq(FooBarJob)
+        expect(subject.active_job.instance_variable_get('@options')[:wait]).to eq(3.hours)
       end
 
       it 'enqueues job for later' do

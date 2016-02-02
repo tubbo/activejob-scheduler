@@ -8,11 +8,17 @@ module ActiveJob
     class Event
       attr_reader :name, :interval, :job_class_name, :arguments, :description
 
-      def initialize(name: '', interval: {}, class_name: '', args: [], description: '')
+      def initialize(
+        name: '',
+        interval: {},
+        class_name: nil,
+        arguments: [],
+        description: ''
+      )
         @name = name
         @interval = Interval.new interval
-        @job_class_name = class_name
-        @arguments = args
+        @job_class_name = class_name || "#{name.classify}Job"
+        @arguments = arguments
         @description = description
       end
 
@@ -30,7 +36,7 @@ module ActiveJob
       #
       # @return [ActiveJob::Base]
       def active_job
-        job_class.set wait: interval
+        job_class.set wait: interval.to_duration
       end
 
       # Enqueue the job for a later time.

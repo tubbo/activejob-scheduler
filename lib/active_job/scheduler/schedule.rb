@@ -27,9 +27,9 @@ module ActiveJob
       # @param [String] name - Class name of the job
       # @return [ActiveJob::Scheduler::Job] or +nil+ if it can't be
       # found.
-      def find(name)
-        super do |job|
-          job.class_name == name
+      def find_by_name(by_class_name)
+        find do |event|
+          event.job_class_name == by_class_name
         end
       end
 
@@ -50,7 +50,7 @@ module ActiveJob
         @events ||= yaml.map do |name, options|
           Event.new(
             name: name,
-            class_name: (options['class'] || name.classify),
+            class_name: options['class_name'],
             arguments: options['args'],
             description: options['description'],
             interval: options.slice(Interval::TYPES)

@@ -1,0 +1,9 @@
+AllCops:
+  Exclude:
+    - vendor/**/*
+    - spec/dummy/**/*
+    - bin/**/*
+
+Metrics/LineLength:
+  Exclude:
+    - activejob-scheduler.gemspec

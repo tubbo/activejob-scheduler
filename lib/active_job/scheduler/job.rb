@@ -13,8 +13,6 @@ module ActiveJob
         around_perform :requeue, if: :scheduled?
       end
 
-      protected
-
       # Test if a scheduled job can be found, and if so, it will be
       # re-enqueued when completed.
       #
@@ -23,6 +21,8 @@ module ActiveJob
       def scheduled?
         event.present?
       end
+
+      protected
 
       # Re-enqueue the current job if it's scheduled.
       #
