@@ -10,36 +10,11 @@ module ActiveJob
       extend ActiveSupport::Concern
 
       included do
-        around_perform :requeue, if: :scheduled?
-      end
-
-      # Test if a scheduled job can be found, and if so, it will be
-      # re-enqueued when completed.
-      #
-      # @protected
-      # @return [Boolean]
-      def scheduled?
-        event.present?
-      end
-
-      protected
-
-      # Re-enqueue the current job if it's scheduled.
-      #
-      # @protected
-      # @return [ActiveJob::Base]
-      def requeue
-        event.enqueue
-      end
-
-      private
-
-      # Find a scheduled job by its class name.
-      #
-      # @private
-      # @return [ActiveJob::Scheduler::Job]
-      def event
-        @event ||= Scheduler.events.find self.class.name
+        around_perform do |job|
+          if event = Scheduler.events.find(job.class.name)
+            event.enqueue
+          end
+        end
       end
     end
   end

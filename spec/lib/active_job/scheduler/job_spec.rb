@@ -12,28 +12,26 @@ module ActiveJob
       end
 
       let :event do
-        double 'Event', enqueue: TestJob.new
+        Event.new(
+          name: 'test_job',
+          every: '1d'
+        )
       end
 
       before do
-        allow(Scheduler.events).to \
-          receive(:find).with('ActiveJob::Scheduler::TestJob').and_return(event)
-      end
-
-      subject { TestJob.new }
-
-      it 'registers after_perform callback only when job is in scheduler' do
-        allow(subject).to receive(:scheduled?).and_return true
-        expect(subject.perform).to be true
-      end
-
-      it 'tests whether job is in scheduler' do
-        allow(subject).to receive(:event).and_return double('Event')
-        expect(subject).to be_scheduled
+        allow(
+          Scheduler.events
+        ).to(
+          receive(:find)
+          .with('ActiveJob::Scheduler::TestJob')
+          .and_return(event)
+        )
       end
 
       it 'enqueues job for next time' do
-        expect(subject.send(:requeue)).to be_a(TestJob)
+        assert_enqueued_with job: TestJob do
+          expect(TestJob.perform_later).to be_a(TestJob)
+        end
       end
     end
   end
