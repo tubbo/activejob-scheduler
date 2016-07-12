@@ -1,11 +1,14 @@
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
 
 require 'active_job/scheduler'
+require 'rspec/active_job'
 require "#{File.dirname(__FILE__)}/dummy/config/environment"
 
 Rails.configuration.active_job.queue_adapter = :test
 
 RSpec.configure do |config|
+  config.include(RSpec::ActiveJob)
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

@@ -14,7 +14,9 @@ module ActiveJob
       let :event do
         Event.new(
           name: 'test_job',
-          every: '1d'
+          interval: {
+            every: '1d'
+          }
         )
       end
 
@@ -29,9 +31,8 @@ module ActiveJob
       end
 
       it 'enqueues job for next time' do
-        assert_enqueued_with job: TestJob do
-          expect(TestJob.perform_later).to be_a(TestJob)
-        end
+        expect(TestJob.perform_later).to be_a(TestJob)
+        expect(TestJob).to have_been_enqueued
       end
     end
   end

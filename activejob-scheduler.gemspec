@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.10'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3'
+  spec.add_development_dependency 'rspec-activejob', '~> 0.6'
   spec.add_development_dependency 'yard', '~> 0'
   spec.add_development_dependency 'rubocop', '~> 0'
   spec.add_development_dependency 'sqlite3'
