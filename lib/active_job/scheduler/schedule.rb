@@ -53,7 +53,7 @@ module ActiveJob
             class_name: options['class_name'],
             arguments: options['args'],
             description: options['description'],
-            interval: options.slice(Interval::TYPES)
+            interval: options.slice(*Interval::TYPES)
           )
         end
       end
