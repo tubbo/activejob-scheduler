@@ -10,7 +10,7 @@ module ActiveJob
       extend ActiveSupport::Concern
 
       included do
-        around_perform do |job|
+        after_perform do |job|
           if event = Scheduler.events.find_by_name(job.class.name)
             event.enqueue
           end
