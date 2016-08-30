@@ -18,7 +18,13 @@ module ActiveJob
       end
 
       def to_duration
-        Rufus::Scheduler.send "parse_#{parser}", value
+        duration = Rufus::Scheduler.send "parse_#{parser}", value, {}
+
+        if duration.is_a? Rufus::Scheduler::CronLine
+          return duration.next_time - Time.now
+        end
+
+        duration
       end
 
       def parser
