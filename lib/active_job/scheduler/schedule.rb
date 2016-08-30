@@ -40,6 +40,10 @@ module ActiveJob
         events.map(&:perform)
       end
 
+      def enqueue
+        events.map(&:enqueue)
+      end
+
       private
 
       # All events scheduled in the jobs.yml file.
