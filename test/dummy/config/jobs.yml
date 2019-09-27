@@ -1,0 +1,3 @@
+yaml_test:
+  class_name: YamlTestJob
+  every: 1h

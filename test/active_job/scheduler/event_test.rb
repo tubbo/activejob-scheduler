@@ -37,6 +37,12 @@ module ActiveJob
         assert_kind_of FooBarJob, @event.perform
         assert @event.perform
       end
+
+      test 'throw error when job class not defined' do
+        bogus = Event.new name: 'bogus'
+
+        assert_raises(NotDefinedError) { bogus.job_class }
+      end
     end
   end
 end

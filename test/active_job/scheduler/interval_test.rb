@@ -20,6 +20,12 @@ module ActiveJob
       test 'parses given value with rufus' do
         assert_equal 1.week, @interval
       end
+
+      test 'parser' do
+        cron = Interval.new 'cron' => '5 4 * * *'
+
+        assert_equal 'cron', cron.parser
+      end
     end
   end
 end

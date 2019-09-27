@@ -11,3 +11,4 @@ Gemfile.lock
 .env
 .yardoc
 doc
+coverage

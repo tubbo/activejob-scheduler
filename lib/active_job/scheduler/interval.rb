@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rufus/scheduler'
-
 module ActiveJob
   module Scheduler
     # Generates a time duration from a given parsed interval value.
@@ -22,9 +20,7 @@ module ActiveJob
       def to_duration
         duration = Rufus::Scheduler.send "parse_#{parser}", value, {}
 
-        if duration.is_a? Rufus::Scheduler::CronLine
-          return duration.next_time - Time.now
-        end
+        return duration.next_time - Time.now if duration.is_a? Fugit::Cron
 
         duration
       end

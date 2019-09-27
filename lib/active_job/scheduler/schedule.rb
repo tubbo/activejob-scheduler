@@ -39,7 +39,7 @@ module ActiveJob
       #
       # @return [Array<ActiveJob::Base>]
       def start
-        events.map(&:enqueue) unless running?
+        events.map(&:enqueue)
       end
 
       private
@@ -66,7 +66,7 @@ module ActiveJob
       # @return [Hash]
       def yaml
         @yaml ||= YAML.load_file path
-      rescue YAML::LoadError
+      rescue StandardError
         raise MissingConfigError
       end
     end

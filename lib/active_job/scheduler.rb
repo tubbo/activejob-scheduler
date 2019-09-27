@@ -4,6 +4,7 @@ require 'yaml'
 require 'active_job'
 require 'active_support/all'
 require 'active_job/scheduler/version'
+require 'rufus/scheduler'
 
 module ActiveJob
   # Scheduled periodic jobs with +ActiveJob+.
@@ -11,10 +12,13 @@ module ActiveJob
     extend ActiveSupport::Autoload
 
     autoload :Engine
+    autoload :Error
     autoload :Event
     autoload :Job
     autoload :Schedule
     autoload :Interval
+    autoload :MissingConfigError
+    autoload :NotDefinedError
 
     class << self
       delegate :start, to: :events

@@ -40,6 +40,17 @@ module ActiveJob
         refute_empty @schedule.send(:events)
         refute_empty @schedule.start
       end
+
+      test 'read from yaml configuration' do
+        assert_kind_of Event, @schedule.find_by_name('YamlTestJob')
+
+        bogus = Schedule.new
+        bogus.expects(:path).returns('/tmp/foo.yml')
+
+        assert_raises(ActiveJob::Scheduler::MissingConfigError) do
+          bogus.find_by_name('YamlTestJob')
+        end
+      end
     end
   end
 end

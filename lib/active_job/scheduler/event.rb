@@ -30,7 +30,7 @@ module ActiveJob
       # @return [Class]
       def job_class
         job_class_name.constantize
-      rescue LoadError
+      rescue NameError
         raise NotDefinedError, job_class_name
       end
 
