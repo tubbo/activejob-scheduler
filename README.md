@@ -2,6 +2,8 @@
 
 [![Current Gem Version](https://badge.fury.io/rb/activejob-scheduler.svg)](http://badge.fury.io/rb/activejob-scheduler)
 [![Build Status](https://travis-ci.org/tubbo/activejob-scheduler.svg?branch=master)](https://travis-ci.org/tubbo/activejob-scheduler)
+[![Maintainability](https://api.codeclimate.com/v1/badges/94b5d52c0059cc8a380b/maintainability)](https://codeclimate.com/github/tubbo/activejob-scheduler/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/94b5d52c0059cc8a380b/test_coverage)](https://codeclimate.com/github/tubbo/activejob-scheduler/test_coverage)
 
 An extension to [ActiveJob][aj] for running background jobs
 periodically, according to a schedule. Inspired by its predecessors,
