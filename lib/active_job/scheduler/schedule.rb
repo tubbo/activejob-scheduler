@@ -51,10 +51,10 @@ module ActiveJob
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
       def events
-        @events ||= events_from_yaml + events_from_jobs
+        @events ||= events_from_yaml + events_from_jobs + events_from_mailers
       end
 
-      # All events from the DSL.
+      # All events from the jobs DSL.
       #
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
@@ -67,6 +67,21 @@ module ActiveJob
           .descendants
           .select { |job| job.to_event.present? }
           .map { |job| Event.new(job.to_event) }
+      end
+
+      # All events from the mailer DSL.
+      #
+      # @private
+      # @return [Array<ActiveJob::Scheduler::Job>]
+      def events_from_mailers
+        Pathname.glob(Rails.root.join('app', 'mailers', '*.rb')).each do |job|
+          require_dependency job.to_s
+        end
+
+        ActionMailer::Base
+          .descendants
+          .select { |mailer| mailer.events.present? }
+          .flat_map { |mailer| mailer.events.map { |event| Event.new(event) } }
       end
 
       # All events scheduled in the jobs.yml file.

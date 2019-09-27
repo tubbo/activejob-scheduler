@@ -44,13 +44,20 @@ module ActiveJob
         #   class NoonJob < ApplicationJob
         #     repeat 'every day at noon', arguments: ['foo']
         #   end
-        def repeat(nat = nil, name: event_name, arguments: [], **interval)
+        def repeat(
+          nat = nil,
+          name: event_name,
+          arguments: [],
+          each: nil,
+          **interval
+        )
           interval = { nat: nat } if nat.present?
           self.to_event = {
             name: name,
             arguments: arguments,
-            interval: interval
-          }
+            interval: interval,
+            each: each
+          }.compact
         end
       end
 

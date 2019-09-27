@@ -10,6 +10,7 @@ module ActiveJob
 
       initializer 'active_job.scheduler' do
         ActiveJob::Base.send :include, ActiveJob::Scheduler::Job
+        ActionMailer::Base.send :include, ActiveJob::Scheduler::Mailer
       end
     end
   end

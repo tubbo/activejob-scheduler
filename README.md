@@ -62,6 +62,36 @@ class GenerateSitemapsJob < ApplicationJob
 end
 ```
 
+The DSL also allows you to iterate over a collection and pass in a
+different argument for each item:
+
+```ruby
+class SyncOrdersJob < ApplicationJob
+  repeat 'every day at 11:30am', each: -> { Order.not_synced }
+
+  def perform(order)
+    ExternalSystem.create(order)
+  end
+end
+```
+
+This will trigger the event every day at 11:30am, but enqueue a job for
+each model in the collection, and pass it into the job arguments. You
+can specify static arguments here as well, they will be passed in prior
+to the item argument at the end.
+
+```ruby
+class SyncOrdersJob < ApplicationJob
+  repeat 'every day at 11:30am',
+    arguments: ['synced'],
+    each: -> { Order.not_synced }
+
+  def perform(type, order)
+    ExternalSystem.create(type: type, order: order) # type is "synced"
+  end
+end
+```
+
 Start the schedule by running this command:
 
 ```bash
@@ -88,6 +118,34 @@ generate_sitemaps:
 
 This is entirely optional, however, and both DSL-based jobs and
 YAML-based jobs will be included in the schedule at runtime.
+
+### Mailers
+
+```ruby
+class AdminMailer < ApplicationMailer
+  repeat :daily_status, 'every day at 8am'
+  def daily_status
+    mail to: User.admins.pluck(:email)
+  end
+end
+```
+
+This will send the email every day at **8:00am**. You can also pass all
+the regular fields from `repeat` in the job DSL like arguments and the
+various fugit-parsed intervals.
+
+You can also send a different email for each recipient:
+
+```ruby
+class UserMailer < ApplicationMailer
+  repeat :status, 'every day at 8am', each: -> { User.receive_email }
+  def status(user)
+  end
+end
+```
+
+This lambda will be called when the event is enqueued, and individual
+mails will be sent out for each user in the collection.
 
 ## Development
 

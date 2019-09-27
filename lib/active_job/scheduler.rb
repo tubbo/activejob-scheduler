@@ -17,10 +17,12 @@ module ActiveJob
     autoload :Error
     autoload :Event
     autoload :Job
+    autoload :Mailer
     autoload :Schedule
     autoload :Interval
     autoload :MissingConfigError
     autoload :NotDefinedError
+    autoload :NotSupportedError
 
     class << self
       delegate :start, to: :events
