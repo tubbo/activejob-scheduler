@@ -4,6 +4,7 @@ require 'yaml'
 require 'active_job'
 require 'active_support/all'
 require 'active_job/scheduler/version'
+require 'active_job/scheduler/engine'
 require 'rufus/scheduler'
 
 module ActiveJob
@@ -11,7 +12,6 @@ module ActiveJob
   module Scheduler
     extend ActiveSupport::Autoload
 
-    autoload :Engine
     autoload :Error
     autoload :Event
     autoload :Job

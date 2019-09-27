@@ -13,6 +13,17 @@ module ActiveJob
 
       included do
         after_perform :enqueue_job, if: :scheduled?
+        class_attribute :to_event
+      end
+
+      class_methods do
+        def repeat(name: self.name.gsub(/Job\Z/, ''), arguments: [], **interval)
+          self.to_event = {
+            name: name,
+            arguments: arguments,
+            interval: interval
+          }
+        end
       end
 
       def enqueue_job

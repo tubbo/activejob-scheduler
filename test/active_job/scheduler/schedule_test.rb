@@ -36,6 +36,7 @@ module ActiveJob
             'every' => '1h'
           }
         )
+        @schedule.expects(:events_from_jobs).returns([])
 
         refute_empty @schedule.send(:events)
         refute_empty @schedule.start
@@ -43,13 +44,16 @@ module ActiveJob
 
       test 'read from yaml configuration' do
         assert_kind_of Event, @schedule.find_by_name('YamlTestJob')
+      end
 
-        bogus = Schedule.new
-        bogus.expects(:path).returns('/tmp/foo.yml')
+      test 'read from dsl configuration' do
+        assert_kind_of Event, @schedule['DslTestJob']
+      end
 
-        assert_raises(ActiveJob::Scheduler::MissingConfigError) do
-          bogus.find_by_name('YamlTestJob')
-        end
+      test 'return nothing when job not found' do
+        @schedule.expects(:path).returns('/tmp/foo.yml')
+
+        assert_nil @schedule.find_by_name('YamlTestJob')
       end
     end
   end

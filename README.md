@@ -35,11 +35,51 @@ Or install it yourself as:
 
 ## Usage
 
-Run the following command to generate a YAML-based schedule:
+To schedule your jobs, add the `repeat` macro to the job definition:
+
+```ruby
+class GenerateSitemapsJob < ApplicationJob
+  repeat every: '1d'
+
+  def perform
+    SitemapGenerator.generate
+  end
+end
+```
+
+This macro can also be used to configure the job event, like its name or
+arguments:
+
+```ruby
+class GenerateSitemapsJob < ApplicationJob
+  repeat every: '1d', name: 'Sitemap Generator', arguments: %w(foo bar)
+
+  def perform(foo, bar)
+    SitemapGenerator.generate(foo, bar) # => foo == "foo", bar == "bar"
+  end
+end
+```
+
+### YAML Schedule
+
+Much like **resque-scheduler**, you can use a YAML schedule file with
+**activejob-scheduler** with a very similar syntax. To generate a new
+one, run:
 
 ```bash
 $ rails generate activejob:schedule
 ```
+
+Then, add your jobs into the YAML like so:
+
+```yaml
+generate_sitemaps:
+  interval:
+    every: '1d'
+```
+
+This is entirely optional, however, and both DSL-based jobs and
+YAML-based jobs will be included in the schedule at runtime.
 
 ## Development
 

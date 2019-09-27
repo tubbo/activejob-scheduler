@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class FooBarJob < ActiveJob::Base
+  include ActiveJob::Scheduler::Job
+
   def perform
     true
   end

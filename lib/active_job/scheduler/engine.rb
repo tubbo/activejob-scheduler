@@ -9,9 +9,7 @@ module ActiveJob
       config.eager_load_namespaces << ActiveJob::Scheduler
 
       initializer 'active_job.scheduler' do
-        ActiveSupport.on_load :active_job do
-          ActiveJob::Base.send :include, ActiveJob::Scheduler::Job
-        end
+        ActiveJob::Base.send :include, ActiveJob::Scheduler::Job
       end
     end
   end
