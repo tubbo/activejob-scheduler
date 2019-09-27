@@ -8,6 +8,7 @@ module ActiveJob
       test 'add events' do
         refute_empty UserMailer.events
         assert_equal 'UserMailer#daily_status', UserMailer.events.first[:name]
+        refute_equal MultiMailer.events, UserMailer.events
       end
     end
   end

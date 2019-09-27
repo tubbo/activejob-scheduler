@@ -8,7 +8,6 @@ module ActiveJob
 
       included do
         class_attribute :events
-        self.events ||= []
       end
 
       class_methods do
@@ -19,8 +18,8 @@ module ActiveJob
         # @param [Array] arguments - Args to pass to the mailer method
         def repeat(mail, nat = nil, arguments: [], each: nil, **interval)
           interval = { nat: nat } if nat.present?
-
-          events << {
+          self.events ||= []
+          self.events << {
             name: "#{name}##{mail}",
             class_name: name,
             arguments: arguments,
