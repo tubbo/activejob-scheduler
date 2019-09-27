@@ -62,6 +62,12 @@ class GenerateSitemapsJob < ApplicationJob
 end
 ```
 
+Start the schedule by running this command:
+
+```bash
+./bin/rails activejob:schedule
+```
+
 ### YAML Schedule
 
 Much like **resque-scheduler**, you can use a YAML schedule file with
