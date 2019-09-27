@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveJob
   module Scheduler
     # An event that has been configured in the schedule to run a

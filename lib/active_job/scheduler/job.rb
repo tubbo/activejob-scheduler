@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveJob
   module Scheduler
     # Extensions to +ActiveJob::Base+ which re-enqueue jobs that have
@@ -10,11 +12,19 @@ module ActiveJob
       extend ActiveSupport::Concern
 
       included do
-        around_perform do |job|
-          if event = Scheduler.events.find(job.class.name)
-            event.enqueue
-          end
-        end
+        after_perform :enqueue_job, if: :scheduled?
+      end
+
+      def enqueue_job
+        event.enqueue
+      end
+
+      def scheduled?
+        event.present?
+      end
+
+      def event
+        @event ||= Scheduler.events.find(self.class.name)
       end
     end
   end

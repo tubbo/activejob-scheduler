@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yaml'
 require 'active_job'
 require 'active_support/all'
@@ -18,7 +20,7 @@ module ActiveJob
     #
     # @return [ActiveJob::Scheduler::Schedule]
     def self.events
-      @jobs ||= Schedule.new
+      @events ||= Schedule.new
     end
   end
 end
