@@ -17,9 +17,19 @@ module ActiveJob
       end
 
       class_methods do
-        # Add this job to the schedule. Also supports all the
-        # rufus-scheduler interval options like `:every` and `:cron`.
+        # Default name for the scheduled event.
         #
+        # @return [String] class name without "Job" at the end
+        def event_name
+          name.gsub(/Job\Z/, '')
+        end
+
+        # Add this job to the schedule. Supports all the Fugit interval
+        # options like `:every`, `:at`, and `:cron`, but also takes a
+        # special string argument form for natural language duration
+        # parsing.
+        #
+        # @param [String] nat - (optional) Natural language interval.
         # @param [String] name - Name of the job. Defaults to the class
         # @param [Array] arguments - Arguments to pass to this job
         # @example Job that repeats every hour
@@ -30,7 +40,12 @@ module ActiveJob
         #   class TwoAmJob < ApplicationJob
         #     repeat cron: "0 2 * * * #{Time.zone.tzinfo.identifier}"
         #   end
-        def repeat(name: self.name.gsub(/Job\Z/, ''), arguments: [], **interval)
+        # @example Natural language example
+        #   class NoonJob < ApplicationJob
+        #     repeat 'every day at noon', arguments: ['foo']
+        #   end
+        def repeat(nat = nil, name: event_name, arguments: [], **interval)
+          interval = { nat: nat } if nat.present?
           self.to_event = {
             name: name,
             arguments: arguments,

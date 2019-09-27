@@ -5,7 +5,7 @@ require 'active_job'
 require 'active_support/all'
 require 'active_job/scheduler/version'
 require 'active_job/scheduler/engine'
-require 'rufus/scheduler'
+require 'fugit'
 
 # A framework for declaring jobs and making them run on a variety of
 # queuing backends.

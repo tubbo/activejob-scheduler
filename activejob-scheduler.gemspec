@@ -30,8 +30,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3', '~> 1.4'
   spec.add_development_dependency 'yard', '>= 0.9.20'
 
-  spec.add_dependency 'activejob'
-  spec.add_dependency 'activesupport'
-  spec.add_dependency 'rufus-scheduler'
-  spec.add_dependency 'travis-release'
+  spec.add_dependency 'activejob', '> 5', '< 7'
+  spec.add_dependency 'activesupport', '> 5', '< 7'
+  spec.add_dependency 'fugit', '~> 1.3'
+  spec.add_dependency 'travis-release', '~> 0'
 end

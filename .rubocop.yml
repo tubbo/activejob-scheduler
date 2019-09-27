@@ -11,3 +11,7 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Exclude:
     - lib/active_job/scheduler/event.rb
+
+Naming/FileName:
+  Exclude:
+    - lib/activejob-scheduler.rb

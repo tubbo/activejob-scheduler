@@ -7,7 +7,7 @@ module ActiveJob
       attr_reader :type, :value
 
       # All interval types in options.
-      TYPES = %w[cron in at every].freeze
+      TYPES = %w[cron in at every nat].freeze
 
       delegate :==, to: :to_duration
 
@@ -18,15 +18,15 @@ module ActiveJob
         end
       end
 
-      # Parse this interval with `Rufus::Scheduler`.
-      #
-      # @return [Fugit::Duration]
+      # Parse this interval with `Fugit`
       def to_duration
-        duration = Rufus::Scheduler.send "parse_#{parser}", value, {}
+        return value if value.is_a? Integer
 
-        return duration.next_time - Time.now if duration.is_a? Fugit::Cron
+        duration = Fugit.public_send("do_parse_#{parser}", value)
 
-        duration
+        return duration.next_time - Time.current if duration.is_a? Fugit::Cron
+
+        duration.to_sec
       end
 
       # Discover which `Rufus::Scheduler` parser to use by checking the
