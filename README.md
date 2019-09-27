@@ -41,7 +41,7 @@ To schedule your jobs, add the `repeat` macro to the job definition:
 
 ```ruby
 class GenerateSitemapsJob < ApplicationJob
-  repeat every: '1d'
+  repeat 'every day at 2am'
 
   def perform
     SitemapGenerator.generate
