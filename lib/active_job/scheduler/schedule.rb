@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveJob
   module Scheduler
     # Look up the schedule at +config/jobs.yml+ and create a collection

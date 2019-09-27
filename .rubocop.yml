@@ -1,7 +1,7 @@
 AllCops:
   Exclude:
     - vendor/**/*
-    - spec/dummy/**/*
+    - test/dummy/**/*
     - bin/**/*
 
 Metrics/LineLength:

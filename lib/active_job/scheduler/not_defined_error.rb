@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveJob
   module Scheduler
     # Thrown when a job is not defined for the given class_name.

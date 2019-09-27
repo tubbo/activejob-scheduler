@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveJob
   module Scheduler
     # Rails app integration. Loads Requeue concern into ActiveJob::Base

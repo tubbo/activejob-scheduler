@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rufus/scheduler'
 
 module ActiveJob
@@ -6,7 +8,7 @@ module ActiveJob
     class Interval
       attr_reader :type, :value
 
-      TYPES = %w(cron in at every).freeze
+      TYPES = %w[cron in at every].freeze
 
       delegate :==, to: :to_duration
 
