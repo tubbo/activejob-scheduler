@@ -13,10 +13,11 @@ module ActiveJob
 
       included do
         after_perform :enqueue_job, if: :scheduled?
+        after_enqueue :mark_as_enqueued, if: :scheduled?
       end
 
       def enqueue_job
-        event.enqueue
+        Scheduler.events.enqueue(event)
       end
 
       def scheduled?

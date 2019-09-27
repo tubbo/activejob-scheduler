@@ -39,7 +39,7 @@ module ActiveJob
       #
       # @return [Array<ActiveJob::Base>]
       def start
-        events.map(&:enqueue)
+        events.map(&:enqueue) unless running?
       end
 
       private

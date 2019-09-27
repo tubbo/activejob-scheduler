@@ -11,7 +11,6 @@ module ActiveJob
       initializer 'active_job.scheduler' do
         ActiveSupport.on_load :active_job do
           ActiveJob::Base.send :include, ActiveJob::Scheduler::Job
-          ActiveJob::Scheduler.events.start
         end
       end
     end

@@ -16,11 +16,15 @@ module ActiveJob
     autoload :Schedule
     autoload :Interval
 
-    # A schedule of all periodic job events.
-    #
-    # @return [ActiveJob::Scheduler::Schedule]
-    def self.events
-      @events ||= Schedule.new
+    class << self
+      delegate :start, to: :events
+
+      # A schedule of all periodic job events.
+      #
+      # @return [ActiveJob::Scheduler::Schedule]
+      def events
+        @events ||= Schedule.new
+      end
     end
   end
 end
