@@ -6,6 +6,7 @@ module ActiveJob
     class Interval
       attr_reader :type, :value
 
+      # All interval types in options.
       TYPES = %w[cron in at every].freeze
 
       delegate :==, to: :to_duration
@@ -17,6 +18,9 @@ module ActiveJob
         end
       end
 
+      # Parse this interval with `Rufus::Scheduler`.
+      #
+      # @return [Fugit::Duration]
       def to_duration
         duration = Rufus::Scheduler.send "parse_#{parser}", value, {}
 
@@ -25,6 +29,10 @@ module ActiveJob
         duration
       end
 
+      # Discover which `Rufus::Scheduler` parser to use by checking the
+      # type.
+      #
+      # @return [String]
       def parser
         case type.to_s
         when 'every'

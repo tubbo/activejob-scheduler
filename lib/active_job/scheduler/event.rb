@@ -10,6 +10,11 @@ module ActiveJob
     class Event
       attr_reader :name, :interval, :job_class_name, :arguments, :description
 
+      # @param [String] name - Name of this event, usually the job class
+      # @param [Hash] interval - When this event should trigger
+      # @param [String] class_name - Job class name if different from name
+      # @param [Array] arguments - Arguments to pass to the job
+      # @param [Array] description - Fancy description for this event
       def initialize(
         name: '',
         interval: {},

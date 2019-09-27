@@ -22,10 +22,6 @@ module ActiveJob
 
       def initialize
         @path = Rails.root.join 'config', 'jobs.yml'
-
-        Pathname.glob(Rails.root.join('app', 'jobs', '*.rb')).each do |job|
-          require_dependency job.to_s
-        end
       end
 
       # Find a job by its +class_name+
@@ -33,9 +29,9 @@ module ActiveJob
       # @param [String] name - Class name of the job
       # @return [ActiveJob::Scheduler::Job] or +nil+ if it can't be
       # found.
-      def find_by_name(by_class_name)
+      def find_by_name(name)
         find do |event|
-          event.job_class_name == by_class_name.to_s
+          event.job_class_name == name.to_s
         end
       end
 
@@ -50,7 +46,7 @@ module ActiveJob
 
       private
 
-      # All events scheduled in the jobs.yml file.
+      # All events scheduled.
       #
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
@@ -58,13 +54,25 @@ module ActiveJob
         @events ||= events_from_yaml + events_from_jobs
       end
 
+      # All events from the DSL.
+      #
+      # @private
+      # @return [Array<ActiveJob::Scheduler::Job>]
       def events_from_jobs
+        Pathname.glob(Rails.root.join('app', 'jobs', '*.rb')).each do |job|
+          require_dependency job.to_s
+        end
+
         ActiveJob::Base
           .descendants
           .select { |job| job.to_event.present? }
           .map { |job| Event.new(job.to_event) }
       end
 
+      # All events scheduled in the jobs.yml file.
+      #
+      # @private
+      # @return [Array<ActiveJob::Scheduler::Job>]
       def events_from_yaml
         yaml.map do |name, options|
           Event.new(

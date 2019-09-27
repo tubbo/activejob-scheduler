@@ -7,6 +7,8 @@ require 'active_job/scheduler/version'
 require 'active_job/scheduler/engine'
 require 'rufus/scheduler'
 
+# A framework for declaring jobs and making them run on a variety of
+# queuing backends.
 module ActiveJob
   # Scheduled periodic jobs with +ActiveJob+.
   module Scheduler
