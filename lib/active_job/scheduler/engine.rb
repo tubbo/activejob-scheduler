@@ -8,12 +8,11 @@ module ActiveJob
       isolate_namespace ActiveJob::Scheduler
       config.eager_load_namespaces << ActiveJob::Scheduler
 
-      ActiveSupport.on_load :active_job do
-        ActiveJob::Base.send :include, ActiveJob::Scheduler::Job
-      end
-
       initializer 'active_job.scheduler' do
-        ActiveJob::Scheduler.events.start
+        ActiveSupport.on_load :active_job do
+          ActiveJob::Base.send :include, ActiveJob::Scheduler::Job
+          ActiveJob::Scheduler.events.start
+        end
       end
     end
   end
