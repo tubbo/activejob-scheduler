@@ -26,7 +26,7 @@ module ActiveJob
                  .with(TestJob.name)
                  .returns(@event)
 
-        assert_enqueued_with job: TestJob do
+        assert_enqueued_with job: TestJob, at: 1.day.from_now do
           assert TestJob.perform_now
         end
       end
