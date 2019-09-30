@@ -83,7 +83,7 @@ module ActiveJob
       # @private
       # @return [ActiveJob::Scheduler::Event]
       def event
-        @event ||= Scheduler.events.find(self.class.name)
+        @event ||= Scheduler.events.find_by_name(self.class.name)
       end
     end
   end

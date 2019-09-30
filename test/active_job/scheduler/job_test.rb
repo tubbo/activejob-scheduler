@@ -22,7 +22,7 @@ module ActiveJob
         )
 
         Scheduler.events
-                 .expects(:find)
+                 .expects(:find_by_name)
                  .with(TestJob.name)
                  .returns(@event)
 
