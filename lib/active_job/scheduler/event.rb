@@ -23,7 +23,7 @@ module ActiveJob
       )
         @name = name
         @interval = Interval.new interval
-        @job_class_name = class_name || "#{name.classify}Job"
+        @job_class_name = class_name || "#{name.camelize}Job"
         @arguments = arguments
         @mail = options[:mail]
         @each = options[:each]
