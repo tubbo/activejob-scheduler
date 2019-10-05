@@ -24,7 +24,7 @@ module ActiveJob
       end
 
       test 'enqueues job for later' do
-        assert_kind_of Array, @event.enqueue
+        assert_kind_of FooBarJob, @event.enqueue
       end
 
       test 'throw error when job class not defined' do
@@ -39,15 +39,15 @@ module ActiveJob
         assert_raises(TypeError) { bogus.enqueue }
       end
 
-      test 'enqueue multiple jobs' do
+      test 'schedule jobs' do
         assert_enqueued_jobs 2, only: MultiJob do
-          Scheduler.events.find_by_name('MultiJob').enqueue
+          Scheduler.events.find_by_name('MultiJob').schedule
         end
       end
 
-      test 'enqueue multiple mails' do
+      test 'schedule mails' do
         assert_enqueued_jobs 2, only: ActionMailer::DeliveryJob do
-          Scheduler.events.find_by_name('MultiMailer').enqueue
+          Scheduler.events.find_by_name('MultiMailer').schedule
         end
       end
     end

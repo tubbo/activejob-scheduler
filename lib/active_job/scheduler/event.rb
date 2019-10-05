@@ -39,16 +39,21 @@ module ActiveJob
         raise NotDefinedError, job_class_name
       end
 
-      # Job object that has been delayed by the interval.
-      #
-      # @return [ActiveJob::Base]
+      # All jobs to be enqueued.
       def jobs
-        return Array.wrap(job_class.set(wait: interval.to_duration)) if single?
+        return Array.wrap(job) if single?
 
         @each.call.map do |item|
           args = arguments + [item]
-          [job_class.set(wait: interval.to_duration), args]
+          [job, args]
         end
+      end
+
+      # Job object that has been delayed by the interval.
+      #
+      # @return [ActiveJob::Base]
+      def job
+        job_class.set(wait: interval.to_duration)
       end
 
       # Whether to call `@each` and iterate
@@ -56,10 +61,9 @@ module ActiveJob
         @each.blank?
       end
 
-      # Enqueue the job for a later time.
-      #
-      # @return [ActiveJob::Base]
-      def enqueue
+      # Enqueue all jobs specified by `:each` in the settings, or a
+      # single job as the start of the schedule.
+      def schedule
         if job_class < ActiveJob::Base
           enqueue_jobs
         elsif job_class < ActionMailer::Base
@@ -69,20 +73,41 @@ module ActiveJob
         end
       end
 
+      # Enqueue the job for a later time.
+      def enqueue(*job_args)
+        args = arguments + job_args
+
+        if job_class < ActiveJob::Base
+          job.perform_later(*args)
+        elsif job_class < ActionMailer::Base
+          mail(*args).deliver_later(wait: interval.to_duration)
+        else
+          raise TypeError, "#{job_class} is not supported by #{self}"
+        end
+      end
+
       private
 
+      # @private
       def enqueue_jobs
         jobs.each { |job, args| job.perform_later(*args) }
       end
 
+      # @private
       def enqueue_mails
         return job_class.send(@mail, *arguments) if single?
 
         @each.call.each do |item|
           args = arguments + [item]
-          job_class.send(@mail, *args)
-                   .deliver_later(wait: interval.to_duration)
+          mail = mailer(*args)
+
+          mail.deliver_later(wait: interval.to_duration)
         end
+      end
+
+      # @private
+      def mailer(*args)
+        job_class.send(@mail, *args)
       end
     end
   end

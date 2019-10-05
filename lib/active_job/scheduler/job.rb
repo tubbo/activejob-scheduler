@@ -67,7 +67,7 @@ module ActiveJob
       #
       # @private
       def enqueue_job
-        event.enqueue
+        event.enqueue(*arguments)
       end
 
       # Whether this job is scheduled.

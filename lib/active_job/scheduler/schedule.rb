@@ -41,7 +41,7 @@ module ActiveJob
       #
       # @return [Array<ActiveJob::Base>]
       def start
-        events.map(&:enqueue)
+        events.map(&:schedule)
       end
 
       private
