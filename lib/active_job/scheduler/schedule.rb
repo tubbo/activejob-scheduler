@@ -18,7 +18,7 @@ module ActiveJob
       # Iterator for the collection of job objects.
       #
       # @return [Iterator]
-      delegate :each, to: :events
+      delegate :each, to: :scheduler_events
 
       def initialize
         @path = Rails.root.join 'config', 'jobs.yml'
@@ -30,8 +30,8 @@ module ActiveJob
       # @return [ActiveJob::Scheduler::Job] or +nil+ if it can't be
       # found.
       def find_by_name(name)
-        find do |event|
-          event.job_class_name == name.to_s
+        find do |scheduler_event|
+          scheduler_event.job_class_name == name.to_s
         end
       end
 
@@ -41,7 +41,7 @@ module ActiveJob
       #
       # @return [Array<ActiveJob::Base>]
       def start
-        events.map(&:schedule)
+        scheduler_events.map(&:schedule)
       end
 
       private
@@ -50,45 +50,45 @@ module ActiveJob
       #
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
-      def events
-        @events ||= events_from_yaml + events_from_jobs + events_from_mailers
+      def scheduler_events
+        @scheduler_events ||= scheduler_events_from_yaml + scheduler_events_from_jobs + scheduler_events_from_mailers
       end
 
       # All events from the jobs DSL.
       #
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
-      def events_from_jobs
+      def scheduler_events_from_jobs
         Pathname.glob(Rails.root.join('app', 'jobs', '*.rb')).each do |job|
           require_dependency job.to_s
         end
 
         ActiveJob::Base
           .descendants
-          .select { |job| job.to_event.present? }
-          .map { |job| Event.new(job.to_event) }
+          .select { |job| job.to_scheduler_event.present? }
+          .map { |job| Event.new(job.to_scheduler_event) }
       end
 
       # All events from the mailer DSL.
       #
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
-      def events_from_mailers
+      def scheduler_events_from_mailers
         Pathname.glob(Rails.root.join('app', 'mailers', '*.rb')).each do |job|
           require_dependency job.to_s
         end
 
         ActionMailer::Base
           .descendants
-          .select { |mailer| mailer.events.present? }
-          .flat_map { |mailer| mailer.events.map { |event| Event.new(event) } }
+          .select { |mailer| mailer.scheduler_events.present? }
+          .flat_map { |mailer| mailer.scheduler_events.map { |scheduler_event| Event.new(scheduler_event) } }
       end
 
       # All events scheduled in the jobs.yml file.
       #
       # @private
       # @return [Array<ActiveJob::Scheduler::Job>]
-      def events_from_yaml
+      def scheduler_events_from_yaml
         yaml.map do |name, options|
           Event.new(
             name: name,
