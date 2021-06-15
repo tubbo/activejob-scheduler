@@ -13,14 +13,14 @@ module ActiveJob
 
       included do
         after_perform :enqueue_job, if: :scheduled?
-        class_attribute :to_event
+        class_attribute :to_scheduler_event
       end
 
       class_methods do
         # Default name for the scheduled event.
         #
         # @return [String] class name without "Job" at the end
-        def event_name
+        def scheduler_event_name
           name.gsub(/Job\Z/, '')
         end
 
@@ -46,13 +46,13 @@ module ActiveJob
         #   end
         def repeat(
           nat = nil,
-          name: event_name,
+          name: scheduler_event_name,
           arguments: [],
           each: nil,
           **interval
         )
           interval = { nat: nat } if nat.present?
-          self.to_event = {
+          self.to_scheduler_event = {
             name: name,
             arguments: arguments,
             interval: interval,
@@ -67,7 +67,7 @@ module ActiveJob
       #
       # @private
       def enqueue_job
-        event.enqueue(*arguments)
+        scheduler_event.enqueue(*arguments)
       end
 
       # Whether this job is scheduled.
@@ -75,15 +75,15 @@ module ActiveJob
       # @private
       # @return [Boolean]
       def scheduled?
-        event.present?
+        scheduler_event.present?
       end
 
       # Event from the schedule
       #
       # @private
       # @return [ActiveJob::Scheduler::Event]
-      def event
-        @event ||= Scheduler.events.find_by_name(self.class.name)
+      def scheduler_event
+        @scheduler_event ||= Scheduler.events.find_by_name(self.class.name)
       end
     end
   end

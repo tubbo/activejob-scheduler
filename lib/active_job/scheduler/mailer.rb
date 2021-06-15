@@ -7,7 +7,7 @@ module ActiveJob
       extend ActiveSupport::Concern
 
       included do
-        class_attribute :events
+        class_attribute :scheduler_events
       end
 
       class_methods do
@@ -18,8 +18,8 @@ module ActiveJob
         # @param [Array] arguments - Args to pass to the mailer method
         def repeat(mail, nat = nil, arguments: [], each: nil, **interval)
           interval = { nat: nat } if nat.present?
-          self.events ||= []
-          self.events << {
+          self.scheduler_events ||= []
+          self.scheduler_events << {
             name: "#{name}##{mail}",
             class_name: name,
             arguments: arguments,

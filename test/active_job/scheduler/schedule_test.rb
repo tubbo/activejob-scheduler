@@ -21,7 +21,7 @@ module ActiveJob
           }
         )
 
-        assert_equal 'FooBarJob', @schedule.send(:events).first.job_class_name
+        assert_equal 'FooBarJob', @schedule.send(:scheduler_events).first.job_class_name
         refute_nil @schedule.find_by_name('FooBarJob')
       end
 
@@ -36,9 +36,9 @@ module ActiveJob
             'every' => '1h'
           }
         )
-        @schedule.expects(:events_from_jobs).returns([])
+        @schedule.expects(:scheduler_events_from_jobs).returns([])
 
-        refute_empty @schedule.send(:events)
+        refute_empty @schedule.send(:scheduler_events)
         refute_empty @schedule.start
       end
 
